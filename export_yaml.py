@@ -1,6 +1,6 @@
 from book import Book
 from read_parser import ReadParser
-from csv_writer import CsvWriter
+from yaml_writer import YamlWriter
 from details_parser import DetailsParser
 from cache_manager import CacheManager
 from page_loader import PageLoader
@@ -8,7 +8,7 @@ from page_loader import PageLoader
 # settings
 input_file_name = 'export.html'
 cache_dir_name = 'cache'
-out_file_name = 'out.csv'
+out_file_name = 'LiveLibExport'
 min_delay = 90
 max_delay = 120
 
@@ -33,6 +33,6 @@ details_parser = DetailsParser(cache)
 ready_books = details_parser.parse(books)
 print('Books ready to export: %s.' % len(ready_books))
 
-writer = CsvWriter()
+writer = YamlWriter()
 writer.save(ready_books, out_file_name)
-print('Books saved to "%s"' % out_file_name)
+print('books saved to "%s" folder as .md files' % out_file_name)

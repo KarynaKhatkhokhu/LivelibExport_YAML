@@ -2,6 +2,8 @@ from lxml import html
 from lxml import etree
 from book import Book
 
+from bs4 import BeautifulSoup
+
 def parse_isbn_str(isbn_str):
 	raw_isbn_str = isbn_str
 	isbn = raw_isbn_str.split(',')[:1][0].split(' ')[0]
@@ -24,12 +26,14 @@ def try_extract_name_from_header(book_html):
 	headers = book_html.xpath('//h1[@id=\"book-title\"]')
 	return first_text_or_none(headers)
 
-def try_extract_name(book_html, book):
+def try_extract_name(book_html, soup, book):
 	name = try_extract_name_from_span(book_html)
 	if name is not None:
 		book.add_name(name)
 		return
-	name = try_extract_name_from_header(book_html)
+	# name = try_extract_name_from_header(book_html)
+	tmplocal = soup.find('h1', class_='bc__book-title')
+	name = tmplocal.text
 	if name is not None:
 		book.add_name(name)
 		return
@@ -37,8 +41,17 @@ def try_extract_name(book_html, book):
 
 def parse_downloaded_book(book_content, book):
 	if book_content is not None:
+		soup = BeautifulSoup(book_content, "lxml")
+		tmp = soup.find('img', id='main-image-book')
+		if tmp != None:
+			book.add_cover(tmp.get("src"))
+		
+		tmp = soup.find('a', class_='bc-author__link')
+		if tmp != None:
+			book.add_author(tmp.text)
+		
 		book_html = html.fromstring(book_content)
-		try_extract_name(book_html, book)
+		try_extract_name(book_html, soup, book)
 		isbn_spans = book_html.xpath('//span[@itemprop="isbn"]')
 		if len(isbn_spans) > 0:
 			raw_isbn = isbn_spans[0].text
