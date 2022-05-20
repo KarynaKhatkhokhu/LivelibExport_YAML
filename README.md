@@ -10,16 +10,18 @@ Obsidian.md -- приложение для заметок. Чтобы иметь
 
 Для отображения убедиться, что установлен плагин DataView, после чего создать заметку со следующим скриптом:
 
-  ```dataview
-      TABLE WITHOUT ID
-          ("![cover|120](" + cover + ")") as Cover,
-          file.link AS Title,
-          author AS "Author",
-          date AS "Date read",
-          rating AS "Rating"
-      FROM "Books"
-      SORT date DESC
-  ```
+```
+	```dataview
+	  TABLE WITHOUT ID
+		  ("![cover|120](" + cover + ")") as Cover,
+		  file.link AS Title,
+		  author AS "Author",
+		  date AS "Date read",
+		  rating AS "Rating"
+	  FROM "Books"
+	  SORT date DESC
+	```
+```
 
 Он будет собирать и отоброжать список (прочитаных) книг:
 
